@@ -8,38 +8,31 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://bb826f7f473246:d3cc1772
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
+
 class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     content = db.Column(db.String(1000))
-    
+
     def __init__(self, title, content):
         self.title = title
         self.content = content
 
-@app.route('/build-a-blog', methods=['POST', 'GET'])
-def is_valid(self):
-	if self.title and self.content:
-		return True
-	else:
-		return False
 
 @app.route("/")
 def index():
-	return redirect("/blog")
+    return redirect("/blogs")
 
 
-@app.route("/blog")
+@app.route("/blogs")
 def display_blog_entries():
-    entry_id = request.args.get('id')
-    if(entry_id):
-        entry = Blog.query.get(entry_id)
+    blog_id = request.args.get('id')
+    if(blog_id):
+        entry = Blog.query.get(blog_id)
         return render_template('single_entry.html', title="Blog Entry", entry=entry)
-    sort = request.args.get('sort')
-    if (sort == 'newest'):
-        all_entries = Blog.query.order_by(Entry.created.desc()).all()
-    else:
-        all_entries = Blog.query.all()
+
+    all_entries = Blog.query.all()
+    return render_template('all_entries.html', entries=all_entries)
 
 
 if __name__ == "__main__":
