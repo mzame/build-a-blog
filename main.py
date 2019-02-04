@@ -35,5 +35,16 @@ def display_blog_entries():
     return render_template('all_entries.html', entries=all_entries)
 
 
+@app.route('/new_entry', methods=['POST', 'GET'])
+def new_entry():
+    if request.method == "GET":
+        #render the template of a new entry
+
+    if request.method == 'POST':    
+        #handle the incoming post request, create a new variable
+        #that will request the title and the content
+        #we will store both in a Blog() variable
+        #redirect to blogs?id=
+
 if __name__ == "__main__":
     app.run()
