@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://bb826f7f473246:d3cc1772@us-cdbr-iron-east-01.cleardb.net/heroku_459e9faa50531d7'
@@ -37,14 +38,15 @@ def display_blog_entries():
 
 @app.route('/new_entry', methods=['POST', 'GET'])
 def new_entry():
-    if request.method == "GET":
-        #render the template of a new entry
-
-    if request.method == 'POST':    
-        #handle the incoming post request, create a new variable
-        #that will request the title and the content
-        #we will store both in a Blog() variable
-        #redirect to blogs?id=
-
-if __name__ == "__main__":
-    app.run()
+  if request.method == 'GET':
+     return render_template('new_entry_form.html', title="New Entry")
+  if request.method == 'POST':
+    title = request.form['title']
+    body = request.form['body']
+    new_blog = Blog(title,body)
+    db.session.add(new_blog)
+    db.session.commit()
+    return redirect("/blogs?id="+ str(new_blog.id))
+if __name__ == '__main__':
+  app.run()
+ 
